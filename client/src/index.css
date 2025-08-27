@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+
+
+/* Custom styles for React Quill to match the dashboard theme */
+.ql-editor {
+  min-height: 250px;
+  background-color: #374151; /* gray-700 */
+  color: #d1d5db; /* gray-300 */
+}
+
+.ql-toolbar {
+  background-color: #1f2937; /* gray-800 */
+  border-color: #4b5563 !important; /* gray-600 */
+}
+
+.ql-toolbar .ql-picker-label {
+  color: #d1d5db !important; /* gray-300 */
+}
+
+.ql-toolbar .ql-stroke {
+  stroke: #d1d5db !important; /* gray-300 */
+}
