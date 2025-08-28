@@ -1,28 +1,24 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react'; // Import useCallback
 import axios from 'axios';
 
-/**
- * A custom hook to manage the logic of uploading an image to Cloudinary.
- * It encapsulates the API call, loading state, and the resulting image URL.
- */
-export const useCloudinaryUpload = () => { // <--- MAKE SURE 'export const' IS HERE
+export const useCloudinaryUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
 
-  const uploadImage = async (e) => {
+  // By wrapping this in useCallback, we ensure the function reference
+  // doesn't change on every render unless its own dependencies change.
+  const uploadImage = useCallback(async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const formData = new FormData();
     formData.append('file', file);
-    // IMPORTANT: Replace with your actual Cloudinary preset
-    formData.append('upload_preset', 'your_cloudinary_upload_preset');
+    formData.append('upload_preset', 'YOUR_CLOUDINARY_UPLOAD_PRESET'); // Replace
 
     setUploading(true);
     try {
-      // IMPORTANT: Replace with your actual cloud name
       const { data } = await axios.post(
-        'https://api.cloudinary.com/v1_1/your_cloud_name/image/upload',
+        'https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload', // Replace
         formData
       );
       setImageUrl(data.secure_url);
@@ -31,7 +27,9 @@ export const useCloudinaryUpload = () => { // <--- MAKE SURE 'export const' IS H
     } finally {
       setUploading(false);
     }
-  };
+  }, []); // Empty dependency array means this function is created only once
 
-  return { uploading, imageUrl, uploadImage };
+  // The 'setImageUrl' function returned by useState is ALREADY stable by default.
+  // We don't need to do anything to it.
+  return { uploading, imageUrl, uploadImage, setImageUrl };
 };
