@@ -170,6 +170,7 @@ const initialState = {
 
 const getToken = (getState) => {
   const { user: { userInfo } } = getState();
+  if (!userInfo) return null;
   return { headers: { Authorization: `Bearer ${userInfo.token}` } };
 };
 
@@ -227,21 +228,45 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Login
       .addCase(login.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(login.fulfilled, (state, action) => { state.loading = false; state.userInfo = action.payload; })
       .addCase(login.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+      // Register
       .addCase(register.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(register.fulfilled, (state, action) => { state.loading = false; state.userInfo = action.payload; })
       .addCase(register.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
-      .addCase(updateUserProfile.pending, (state) => { state.loading = true; state.error = null; })
-      .addCase(updateUserProfile.fulfilled, (state, action) => { state.loading = false; state.userInfo = action.payload; })
-      .addCase(updateUserProfile.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
-      .addCase(fetchAllUsers.pending, (state) => { state.allUsers.loading = true; })
-      .addCase(fetchAllUsers.fulfilled, (state, action) => { state.allUsers.loading = false; state.allUsers.users = action.payload; })
-      .addCase(fetchAllUsers.rejected, (state, action) => { state.allUsers.loading = false; state.allUsers.error = action.payload; })
+      // Update User Profile (SINGLE, CORRECTED VERSION)
+      .addCase(updateUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userInfo = action.payload;
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Fetch All Users (for Admin)
+      .addCase(fetchAllUsers.pending, (state) => {
+        state.allUsers.loading = true;
+      })
+      .addCase(fetchAllUsers.fulfilled, (state, action) => {
+        state.allUsers.loading = false;
+        state.allUsers.users = action.payload;
+      })
+      .addCase(fetchAllUsers.rejected, (state, action) => {
+        state.allUsers.loading = false;
+        state.allUsers.error = action.payload;
+      })
+      // Delete a User (for Admin)
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.allUsers.loading = false;
-        state.allUsers.users = state.allUsers.users.filter((user) => user._id !== action.payload);
+        state.allUsers.users = state.allUsers.users.filter(
+          (user) => user._id !== action.payload
+        );
       });
   },
 });

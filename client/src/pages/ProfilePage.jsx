@@ -62,7 +62,6 @@
 // };
 
 // export default ProfilePage;
-
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserProfile } from '../features/users/userSlice';
@@ -75,7 +74,6 @@ const ProfilePage = () => {
     const dispatch = useDispatch();
     const { userInfo, loading, error } = useSelector((state) => state.user);
     
-    // Call the hook to get all its functions and state
     const { uploading, imageUrl, uploadImage, setImageUrl } = useCloudinaryUpload();
 
     const [name, setName] = useState('');
@@ -84,17 +82,14 @@ const ProfilePage = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState(null);
 
-    // This useEffect now correctly populates the form and image state
-    // when the component first loads or when userInfo changes.
     useEffect(() => {
         if (userInfo) {
             setName(userInfo.name);
             setEmail(userInfo.email);
-            // Set the initial image URL from the user's profile
+            // Crucially, set the hook's URL from the user's info
             setImageUrl(userInfo.avatar || '');
         }
-    // We remove setImageUrl from the dependency array because it's a stable function.
-    }, [userInfo]); 
+    }, [userInfo, setImageUrl]);
 
     const handleProfileUpdate = (e) => {
         e.preventDefault();
@@ -120,8 +115,9 @@ const ProfilePage = () => {
                         {/* Avatar Column */}
                         <div className="md:col-span-1 flex flex-col items-center">
                             <h2 className="text-xl font-semibold text-white mb-4">Profile Picture</h2>
+                            {/* This img tag now reliably shows the uploaded image or a fallback */}
                             <img 
-                                src={imageUrl || `https://ui-avatars.com/api/?name=${name}&background=0284c7&color=fff&size=128`} 
+                                src={imageUrl || `https://ui-avatars.com/api/?name=${name || 'User'}&background=0284c7&color=fff&size=128`} 
                                 alt="Profile"
                                 className="w-40 h-40 rounded-full object-cover mb-4 border-4 border-gray-700"
                             />
@@ -135,6 +131,7 @@ const ProfilePage = () => {
                         {/* Form Column */}
                         <div className="md:col-span-2">
                             <form onSubmit={handleProfileUpdate} className="space-y-6">
+                                {/* Form inputs remain the same */}
                                 <div>
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name</label>
                                     <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} required className="mt-1 block w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -153,7 +150,7 @@ const ProfilePage = () => {
                                 </div>
                                 <div className="pt-4">
                                     <button type="submit" disabled={loading || uploading} className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50">
-                                        {loading ? 'Saving...' : 'Update Profile'}
+                                        {loading || uploading ? 'Saving...' : 'Update Profile'}
                                     </button>
                                 </div>
                             </form>

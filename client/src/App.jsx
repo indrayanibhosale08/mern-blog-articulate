@@ -100,6 +100,7 @@ import AdminDashboardPage from './pages/AdminDashboardPage';
 
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
+import CommentsPage from './pages/CommentsPage';
 
 function App() {
   return (
@@ -117,6 +118,7 @@ function App() {
               <Route index element={<DashboardHomePage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="my-blogs" element={<MyBlogsPage />} />
+              <Route path='comments' element={<CommentsPage />} />
               <Route path="create-blog" element={<CreateBlogPage />} />
               <Route path="edit-blog/:id" element={<EditBlogPage />} />
               <Route path="admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
