@@ -27,6 +27,7 @@ const Sidebar = () => {
         </Link>
         <nav className="flex flex-col space-y-4">
           <NavLink to="/" className={navLinkClasses} end>Home</NavLink>
+          <NavLink to="/blogs" className={navLinkClasses}>All Articles</NavLink>
           {loggedIn && <NavLink to="/dashboard" className={navLinkClasses}>Dashboard</NavLink>}
           {isAdmin && <NavLink to="/dashboard/admin" className={navLinkClasses}>Admin Panel</NavLink>}
         </nav>
