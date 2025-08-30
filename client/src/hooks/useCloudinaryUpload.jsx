@@ -13,12 +13,12 @@ export const useCloudinaryUpload = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'YOUR_CLOUDINARY_UPLOAD_PRESET'); // Replace
+    formData.append('upload_preset', 'mern_blog_uploads'); 
 
     setUploading(true);
     try {
-      const { data } = await axios.post(
-        'https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload', // Replace
+       const { data } = await axios.post(
+        'https://api.cloudinary.com/v1_1/dz0bxhks7/image/upload',
         formData
       );
       setImageUrl(data.secure_url);
